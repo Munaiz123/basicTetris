@@ -1,13 +1,13 @@
-document.addEventListener('DOMContentLoaded', ()=>{
-  const grid = document.querySelector('.grid')
-  let squares = Array.from(document.querySelectorAll(".grid div"))
-  const scoreDisplay = document.getElementById('score')
-  const startButton = document.getElementById('start-button')
-  const width = 10
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".grid");
+  let squares = Array.from(document.querySelectorAll(".grid div"));
+  const scoreDisplay = document.getElementById("score");
+  const startButton = document.getElementById("start-button");
+  const width = 10;
 
   const lShape = [
     [1, width + 1, width * 2 + 1, 2],
-    [width, width + 1, width, width * 2 + 2],
+    [width, width + 1, width + 2, width * 2 + 2],
     [1, width + 1, width * 2 + 1, width * 2],
     [width, width * 2, width * 2 + 1, width * 2 + 2],
   ];
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   const tShape = [
     [1, width, width + 1, width + 2],
-    [1, width + 2, width + 2, width * 2 + 1],
+    [1, width + 1, width + 2, width * 2 + 1],
     [width, width + 1, width + 2, width * 2 + 1],
     [1, width, width + 1, width * 2 + 1],
   ];
@@ -34,32 +34,58 @@ document.addEventListener('DOMContentLoaded', ()=>{
   ];
 
   const iShape = [
-    [1, width, +1, width * 2 + 1, width * 3 + 1],
+    [1, width + 1, width * 2 + 1, width * 3 + 1],
     [width, width + 1, width + 2, width + 3],
     [1, width + 1, width * 2 + 1, width * 3 + 1],
     [width, width + 1, width + 2, width + 3],
   ];
 
-  const shapes = [lShape,zShape,tShape,oShape,iShape]
+  const shapes = [lShape, zShape, tShape, oShape, iShape];
 
-  let currentPosition = 4
-  let currentRotation = 0
+  let currentPosition = 4;
+  let currentRotation = 0;
 
   // select shape at random
-  let random = Math.floor(Math.random()*shapes.length)
-  let current = shapes[random][0]
+  let random = Math.floor(Math.random() * shapes.length);
+  let current = shapes[random][0];
 
-
-  function draw(){
-    current.forEach(index =>{
-      squares[currentPosition + index].classList.add('tetrimino')
-    })
+  function draw() {
+    current.forEach((index) => {
+      squares[currentPosition + index].classList.add("tetrimino");
+    });
   }
 
-  function undraw(){
-    current.forEach(index =>{
-      squares[currentPosition + index].classList.remove('tetrimino')
-    })
+  function undraw() {
+    current.forEach((index) => {
+      squares[currentPosition + index].classList.remove("tetrimino");
+    });
   }
 
-})
+  // allows shape to move down every second
+  let timerId = setInterval(moveDown, 175);
+
+  function moveDown() {
+    undraw();
+    currentPosition += width;
+    draw();
+    freeze();
+  }
+
+  function freeze() {
+    if (
+      current.some((index) =>
+        squares[currentPosition + index + width].classList.contains("taken")
+      )
+    ) {
+      current.forEach((index) =>
+        squares[currentPosition + index].classList.add("taken")
+      );
+
+      // start new shape falling
+      random = Math.floor(Math.random() * shapes.length);
+      current = shapes[random][currentRotation];
+      currentPosition = 4;
+      draw();
+    }
+  }
+});
