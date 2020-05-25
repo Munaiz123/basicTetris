@@ -68,7 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if(event.keyCode === 37) moveLeft() // ◀️ left arrow key
     if(event.keyCode === 38) rotate() // 🔼 up arrow key
     if(event.keyCode === 39) moveRight() //  ▶️ right arrow key
+    if(event.keyCode === 40) moveDown()
   }
+
+
   document.addEventListener('keyup',control)
 
 
