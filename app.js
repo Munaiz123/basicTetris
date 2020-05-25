@@ -64,6 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // allows shape to move down every second
   let timerId = setInterval(moveDown, 500);
 
+  function control(event){
+    if(event.keyCode === 37) moveLeft()
+    if(event.keyCode === 39) moveRight()
+  }
+  document.addEventListener('keyup',control)
   function moveDown() {
     undraw();
     currentPosition += width;
@@ -101,4 +106,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     draw()
   }
+
+  function moveRight(){
+    undraw()
+    const isAtRigtEdge = current.some(index =>(currentPosition + index) % width === width -1)
+
+    if(!isAtRigtEdge) currentPosition +=1
+
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))){
+      currentPosition -=1
+    }
+    draw()
+  }
+
+
 });
