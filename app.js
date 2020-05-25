@@ -65,10 +65,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let timerId = setInterval(moveDown, 500);
 
   function control(event){
-    if(event.keyCode === 37) moveLeft()
-    if(event.keyCode === 39) moveRight()
+    if(event.keyCode === 37) moveLeft() // ◀️ left arrow key
+    if(event.keyCode === 38) rotate() // 🔼 up arrow key
+    if(event.keyCode === 39) moveRight() //  ▶️ right arrow key
   }
   document.addEventListener('keyup',control)
+
+
   function moveDown() {
     undraw();
     currentPosition += width;
@@ -119,5 +122,13 @@ document.addEventListener("DOMContentLoaded", () => {
     draw()
   }
 
+  function rotate(){
+    undraw()
+    currentRotation ++
+    // if current rotation = 4 go back to original position of the shape ⤵️
+    if(currentRotation === current.length) currentRotation = 0;
+    current = shapes[random][currentRotation]
+    draw()
+  }
 
 });
